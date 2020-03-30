@@ -1,5 +1,17 @@
 <template>
-  <div class="repository">
-    <h1>Repository</h1>
+  <div>
+    <Details />
   </div>
 </template>
+
+<script>
+// @ is an alias to /src
+import Details from "@/components/Details.vue";
+
+export default {
+  name: "Repository",
+  components: {
+    Details
+  }
+};
+</script>

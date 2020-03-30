@@ -12,7 +12,7 @@ const routes = [
     component: Home
   },
   {
-    path: "/repository",
+    path: "/repository/:name",
     name: "Repository",
     component: Repository
   }
