@@ -31,7 +31,7 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     const repositories = localStorage.getItem("repositories");
 
     if (repositories) {
