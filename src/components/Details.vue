@@ -17,7 +17,11 @@
       </ul>
     </div>
     <ul class="issues">
-      <li v-for="issue in issues" :key="issue.id.toString()">
+      <li
+        v-for="issue in issues"
+        :key="issue.id.toString()"
+        @click="handleIssue(issue)"
+      >
         <img :src="issue.user.avatar_url" />
         <span>{{ issue.title }}</span>
       </li>
@@ -73,6 +77,10 @@ export default {
   },
 
   methods: {
+    handleIssue(issue) {
+      window.location.href = issue.html_url;
+    },
+
     async handleFilter(index) {
       this.selectedFilter = index;
 
@@ -196,6 +204,10 @@ ul.issues {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 }
