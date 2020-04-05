@@ -56,9 +56,7 @@ export default {
     }
   },
 
-  props: {
-    msg: String
-  }
+  props: {}
 };
 </script>
 

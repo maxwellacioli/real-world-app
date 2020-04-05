@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <router-link :to="{ name: 'Main' }">Voltar</router-link>
+    <router-link :to="{ name: 'Home' }">Voltar</router-link>
     <img :src="repo.img" />
     <h1>{{ repo.name }}</h1>
     <hr />
@@ -55,10 +55,6 @@ export default {
   },
 
   methods: {
-    async send(e) {
-      e.preventDefault();
-    },
-
     async handlePage(action) {
       if (action === "next") {
         this.page++;
