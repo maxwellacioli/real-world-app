@@ -4,13 +4,23 @@
       <font-awesome-icon :icon="['fab', 'github-alt']" />Repositórios
     </p>
     <form>
-      <input placeholder="Adicionar Repositório" v-model="newRepo" />
-      <button type="submit" @click.prevent="send" :disabled="loading || newRepo===''">
-        <font-awesome-icon :icon="['fas', 'plus']" v-if="!loading" />
-        <transition name="rotation" v-else>
-          <font-awesome-icon :icon="['fas', 'circle-notch']" />
-        </transition>
-      </button>
+      <div>
+        <input
+          placeholder="Adicionar Repositório"
+          v-model="newRepo"
+          v-bind:class="{ 'input-error': error }"
+          v-on:click="handleInput()"
+        />
+        <button type="submit" @click.prevent="send" :disabled="loading || newRepo===''">
+          <font-awesome-icon :icon="['fas', 'plus']" v-if="!loading" />
+          <font-awesome-icon
+            :icon="['fas', 'circle-notch']"
+            v-else
+            v-bind:class="{ 'icon-rotation': loading }"
+          />
+        </button>
+      </div>
+      <span v-if="error">Repositório não encontrado!</span>
     </form>
     <ul id="repo-list">
       <li v-for="repo in repos" :key="repo.name">
@@ -45,6 +55,10 @@ export default {
   },
 
   methods: {
+    handleInput() {
+      this.error = false;
+    },
+
     async send(e) {
       e.preventDefault();
       if (this.newRepo !== "") {
@@ -88,42 +102,57 @@ export default {
 form {
   margin-top: 30px;
   display: flex;
+  flex-direction: column;
 
-  button {
+  div {
     display: flex;
-    background: green;
-    margin-left: 10px;
 
-    border: 0;
-    padding: 0 15px;
-    margin-left: 10px;
-    border-radius: 4px;
-
-    svg {
+    button {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+      background: green;
+      margin-left: 10px;
+
+      border: 0;
+      padding: 0 15px;
+      margin-left: 10px;
+      border-radius: 4px;
+
+      svg {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      &:disabled {
+        /* &[disabled] { */
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
     }
 
-    &:disabled {
-      /* &[disabled] { */
-      cursor: not-allowed;
-      opacity: 0.6;
+    input {
+      flex: 1;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 16px;
+
+      border: 1px solid #eee;
     }
   }
 
-  input {
-    flex: 1;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 16px;
-
-    border: 1px solid #eee;
+  span {
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
   }
 }
 
-.rotation-enter-active {
+.input-error {
+  border: 1px solid red;
+}
+
+.icon-rotation {
   animation: rotation 2s infinite linear;
 }
 
