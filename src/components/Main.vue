@@ -1,8 +1,6 @@
 <template>
   <div class="main">
-    <p>
-      <font-awesome-icon :icon="['fab', 'github-alt']" />Repositórios
-    </p>
+    <p><font-awesome-icon :icon="['fab', 'github-alt']" />Repositórios</p>
     <form>
       <div>
         <input
@@ -11,7 +9,11 @@
           v-bind:class="{ 'input-error': error }"
           v-on:click="handleInput()"
         />
-        <button type="submit" @click.prevent="send" :disabled="loading || newRepo===''">
+        <button
+          type="submit"
+          @click.prevent="send"
+          :disabled="loading || newRepo === ''"
+        >
           <font-awesome-icon :icon="['fas', 'plus']" v-if="!loading" />
           <font-awesome-icon
             :icon="['fas', 'circle-notch']"
@@ -25,7 +27,9 @@
     <ul id="repo-list">
       <li v-for="repo in repos" :key="repo.name">
         <span>{{ repo.name }}</span>
-        <router-link :to="{ name: 'Repository', params: { name: repo.name } }">Detalhes</router-link>
+        <router-link :to="{ name: 'Repository', params: { name: repo.name } }"
+          >Detalhes</router-link
+        >
       </li>
     </ul>
   </div>

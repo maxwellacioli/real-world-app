@@ -11,8 +11,10 @@
       </li>
     </ul>
     <div class="page">
-      <button v-on:click="handlePage('back')" :disabled="this.page < 2">Anterior</button>
-      <span>Página {{this.page}}</span>
+      <button v-on:click="handlePage('back')" :disabled="this.page < 2">
+        Anterior
+      </button>
+      <span>Página {{ this.page }}</span>
       <button v-on:click="handlePage('next')">Próxima</button>
     </div>
   </div>
