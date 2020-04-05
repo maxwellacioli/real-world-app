@@ -57,6 +57,12 @@ export default {
     };
   },
 
+  watch: {
+    repos: function(newRepos) {
+      localStorage.setItem("repositories", JSON.stringify(newRepos));
+    }
+  },
+
   created() {
     const repositories = localStorage.getItem("repositories");
 
@@ -73,7 +79,6 @@ export default {
 
     handleRemove(index) {
       this.repos.splice(index, 1);
-      localStorage.setItem("repositories", JSON.stringify(this.repos));
     },
 
     async send(e) {
@@ -93,8 +98,6 @@ export default {
             };
 
             this.repos = [...this.repos, data];
-
-            localStorage.setItem("repositories", JSON.stringify(this.repos));
 
             this.newRepo = "";
           } catch (error) {
