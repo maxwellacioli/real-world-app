@@ -23,6 +23,7 @@
         </button>
       </div>
       <span v-if="error">Repositório não encontrado!</span>
+      <span v-if="exists">Repositório já existe!</span>
     </form>
     <ul id="repo-list">
       <li v-for="(repo, index) in repos" :key="repo.name">
@@ -51,7 +52,8 @@ export default {
       repos: [],
       newRepo: "",
       loading: false,
-      error: false
+      error: false,
+      exists: false
     };
   },
 
@@ -66,34 +68,44 @@ export default {
   methods: {
     handleInput() {
       this.error = false;
+      this.exists = false;
     },
 
     handleRemove(index) {
       this.repos.splice(index, 1);
+      localStorage.setItem("repositories", JSON.stringify(this.repos));
     },
 
     async send(e) {
       e.preventDefault();
+
       if (this.newRepo !== "") {
-        this.loading = true;
+        const exists = this.repos.find(r => r.name === this.newRepo);
 
-        try {
-          const response = await api.get(`/repos/${this.newRepo}`);
+        if (!exists) {
+          this.loading = true;
 
-          const data = {
-            name: response.data.full_name
-          };
+          try {
+            const response = await api.get(`/repos/${this.newRepo}`);
 
-          this.repos = [...this.repos, data];
+            const data = {
+              name: response.data.full_name
+            };
 
-          localStorage.setItem("repositories", JSON.stringify(this.repos));
+            this.repos = [...this.repos, data];
 
-          this.newRepo = "";
-        } catch (error) {
-          this.error = true;
+            localStorage.setItem("repositories", JSON.stringify(this.repos));
+
+            this.newRepo = "";
+          } catch (error) {
+            this.error = true;
+          } finally {
+            this.loading = false;
+          }
+        } else {
+          this.exists = true;
         }
       }
-      this.loading = false;
     }
   },
 
