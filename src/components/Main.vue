@@ -5,8 +5,9 @@
     </p>
     <form>
       <input placeholder="Adicionar Repositório" v-model="newRepo" />
-      <button type="submit" @click.prevent="send">
-        <font-awesome-icon :icon="['fas', 'plus']" />
+      <button type="submit" @click.prevent="send" :disabled="loading">
+        <font-awesome-icon :icon="['fas', 'plus']" v-if="!loading" />
+        <font-awesome-icon :icon="['fas', 'circle-notch']" v-else />
       </button>
     </form>
     <ul id="repo-list">
@@ -27,7 +28,8 @@ export default {
   data() {
     return {
       repos: [],
-      newRepo: ""
+      newRepo: "",
+      loading: false
     };
   },
 
@@ -43,6 +45,8 @@ export default {
     async send(e) {
       e.preventDefault();
       if (this.newRepo !== "") {
+        this.loading = true;
+
         const response = await api.get(`/repos/${this.newRepo}`);
 
         const data = {
@@ -52,6 +56,9 @@ export default {
         this.repos = [...this.repos, data];
 
         localStorage.setItem("repositories", JSON.stringify(this.repos));
+
+        this.newRepo = "";
+        this.loading = false;
       }
     }
   },
@@ -96,6 +103,19 @@ form {
       /* &[disabled] { */
       cursor: not-allowed;
       opacity: 0.6;
+
+      svg {
+        animation: rotation 2s infinite linear;
+
+        @keyframes rotation {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(359deg);
+          }
+        }
+      }
     }
   }
 
