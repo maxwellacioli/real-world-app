@@ -25,11 +25,16 @@
       <span v-if="error">Repositório não encontrado!</span>
     </form>
     <ul id="repo-list">
-      <li v-for="repo in repos" :key="repo.name">
+      <li v-for="(repo, index) in repos" :key="repo.name">
         <span>{{ repo.name }}</span>
-        <router-link :to="{ name: 'Repository', params: { name: repo.name } }"
-          >Detalhes</router-link
-        >
+        <div>
+          <router-link :to="{ name: 'Repository', params: { name: repo.name } }"
+            >Detalhes</router-link
+          >
+          <button @click="handleRemove(index)">
+            <font-awesome-icon :icon="['fas', 'trash']" />
+          </button>
+        </div>
       </li>
     </ul>
   </div>
@@ -61,6 +66,10 @@ export default {
   methods: {
     handleInput() {
       this.error = false;
+    },
+
+    handleRemove(index) {
+      this.repos.splice(index, 1);
     },
 
     async send(e) {
@@ -197,16 +206,35 @@ ul {
 
   li {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    padding: 15px 20px;
+    border: 1px solid #eee;
 
     span {
       color: #000;
       font-size: 14px;
     }
 
-    a {
-      color: green;
-      font-size: 14px;
+    div {
+      a {
+        text-decoration: none;
+        color: green;
+        font-size: 14px;
+      }
+
+      button {
+        padding: 5px 5px;
+        margin-left: 10px;
+        border-radius: 3px;
+        border: 1px solid #eee;
+        background: green;
+        color: #fff;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
 
     & + li {

@@ -3,8 +3,20 @@
     <router-link :to="{ name: 'Home' }">Voltar</router-link>
     <img :src="repo.img" />
     <h1>{{ repo.name }}</h1>
-    <hr />
-    <ul id="issues">
+    <div>
+      <span class="filter-label">Filtrar por: </span>
+      <ul class="filters">
+        <li v-for="(f, index) in filters" :key="f.filter">
+          <button
+            @click="handleFilter(index)"
+            :class="{ selected: index === selectedFilter }"
+          >
+            {{ f.filter }}
+          </button>
+        </li>
+      </ul>
+    </div>
+    <ul class="issues">
       <li v-for="issue in issues" :key="issue.id.toString()">
         <img :src="issue.user.avatar_url" />
         <span>{{ issue.title }}</span>
@@ -30,7 +42,10 @@ export default {
     return {
       issues: [],
       repo: {},
-      page: 1
+      page: 1,
+      selectedFilter: 0,
+      filters: [{ filter: "All" }, { filter: "Open" }, { filter: "Closed" }],
+      test: true
     };
   },
 
@@ -41,6 +56,7 @@ export default {
       api.get(`repos/${repoName}`),
       api.get(`repos/${repoName}/issues`, {
         params: {
+          state: this.filters[this.selectedFilter].filter.toLowerCase(),
           per_page: 5,
           page: this.page
         }
@@ -57,6 +73,13 @@ export default {
   },
 
   methods: {
+    async handleFilter(index) {
+      this.selectedFilter = index;
+
+      console.log(index);
+      this.handleIssues();
+    },
+
     async handlePage(action) {
       if (action === "next") {
         this.page++;
@@ -74,6 +97,7 @@ export default {
     async handleIssues() {
       const response = await api.get(`repos/${this.repo.name}/issues`, {
         params: {
+          state: this.filters[this.selectedFilter].filter.toLowerCase(),
           per_page: 5,
           page: this.page
         }
@@ -124,10 +148,31 @@ hr {
   border-top: 1px solid #eee;
 }
 
-ul {
+ul.filters {
+  display: flex;
+  margin-top: 10px;
+
+  li {
+    list-style-type: none;
+
+    button {
+      margin: auto 10px;
+      padding: 10px 20px;
+      border: 0;
+      border-radius: 4px;
+      background: green;
+      color: #fff;
+      opacity: 0.5;
+    }
+  }
+}
+
+ul.issues {
   color: black;
   width: 100%;
-  margin: 30px 0px;
+  margin-top: 30px;
+  padding: 30px 0px;
+  border-top: 1px solid #eee;
 
   li {
     display: flex;
@@ -163,8 +208,7 @@ ul {
   color: #000;
 
   button {
-    width: 100px;
-    height: 50px;
+    padding: 15px 20px;
     border-radius: 5px;
     border: 0;
     color: #fff;
@@ -180,5 +224,16 @@ ul {
 
 h1 {
   color: black;
+  margin-bottom: 30px;
+}
+
+.filter-label {
+  span {
+    font-size: 16px;
+  }
+}
+
+.selected {
+  opacity: 1 !important;
 }
 </style>
