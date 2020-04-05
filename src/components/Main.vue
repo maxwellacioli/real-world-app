@@ -150,6 +150,10 @@ ul {
       color: green;
       font-size: 14px;
     }
+
+    & + li {
+      margin-top: 20px;
+    }
   }
 }
 </style>
