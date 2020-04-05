@@ -31,7 +31,8 @@ export default {
     return {
       repos: [],
       newRepo: "",
-      loading: false
+      loading: false,
+      error: false
     };
   },
 
@@ -49,19 +50,23 @@ export default {
       if (this.newRepo !== "") {
         this.loading = true;
 
-        const response = await api.get(`/repos/${this.newRepo}`);
+        try {
+          const response = await api.get(`/repos/${this.newRepo}`);
 
-        const data = {
-          name: response.data.full_name
-        };
+          const data = {
+            name: response.data.full_name
+          };
 
-        this.repos = [...this.repos, data];
+          this.repos = [...this.repos, data];
 
-        localStorage.setItem("repositories", JSON.stringify(this.repos));
+          localStorage.setItem("repositories", JSON.stringify(this.repos));
 
-        this.newRepo = "";
-        this.loading = false;
+          this.newRepo = "";
+        } catch (error) {
+          this.error = true;
+        }
       }
+      this.loading = false;
     }
   },
 
