@@ -4,15 +4,22 @@
     <form>
       <div>
         <input
-          placeholder="Adicionar Repositório"
-          v-model="newRepo"
+          placeholder="Dono do Repositório"
+          v-model="ownerName"
+          v-bind:class="{ 'input-error': error }"
+          v-on:click="handleInput()"
+        />
+        <span class="test" />
+        <input
+          placeholder="Nome do Repositório"
+          v-model="repoName"
           v-bind:class="{ 'input-error': error }"
           v-on:click="handleInput()"
         />
         <button
           type="submit"
           @click.prevent="send"
-          :disabled="loading || newRepo === ''"
+          :disabled="loading || ownerName === '' || repoName === ''"
         >
           <font-awesome-icon :icon="['fas', 'plus']" v-if="!loading" />
           <font-awesome-icon
@@ -50,7 +57,8 @@ export default {
   data() {
     return {
       repos: [],
-      newRepo: "",
+      ownerName: "",
+      repoName: "",
       loading: false,
       error: false,
       exists: false
@@ -84,14 +92,16 @@ export default {
     async send(e) {
       e.preventDefault();
 
-      if (this.newRepo !== "") {
-        const exists = this.repos.find(r => r.name === this.newRepo);
+      if (this.ownerName !== "" && this.repoName !== "") {
+        const repo = `${this.ownerName}/${this.repoName}`;
+
+        const exists = this.repos.find(r => r.name === repo);
 
         if (!exists) {
           this.loading = true;
 
           try {
-            const response = await api.get(`/repos/${this.newRepo}`);
+            const response = await api.get(`/repos/${repo}`);
 
             const data = {
               name: response.data.full_name
@@ -99,7 +109,8 @@ export default {
 
             this.repos = [...this.repos, data];
 
-            this.newRepo = "";
+            this.ownerName = "";
+            this.repoName = "";
           } catch (error) {
             this.error = true;
           } finally {
@@ -171,6 +182,10 @@ form {
       font-size: 16px;
 
       border: 1px solid #eee;
+
+      &:nth-of-type(1) {
+        margin-right: 10px;
+      }
     }
   }
 
