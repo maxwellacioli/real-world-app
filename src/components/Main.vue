@@ -147,6 +147,8 @@ form {
   margin-top: 30px;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  width: auto;
 
   div {
     display: flex;
@@ -176,6 +178,7 @@ form {
     }
 
     input {
+      min-width: 150px;
       flex: 1;
       padding: 10px 20px;
       border-radius: 4px;
