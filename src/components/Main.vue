@@ -125,6 +125,11 @@ export default {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   padding: 30px;
   margin: 80px auto;
+
+  p {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 form {
