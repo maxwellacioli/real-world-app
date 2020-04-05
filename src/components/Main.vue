@@ -5,9 +5,11 @@
     </p>
     <form>
       <input placeholder="Adicionar Repositório" v-model="newRepo" />
-      <button type="submit" @click.prevent="send" :disabled="loading">
+      <button type="submit" @click.prevent="send" :disabled="loading || newRepo===''">
         <font-awesome-icon :icon="['fas', 'plus']" v-if="!loading" />
-        <font-awesome-icon :icon="['fas', 'circle-notch']" v-else />
+        <transition name="rotation" v-else>
+          <font-awesome-icon :icon="['fas', 'circle-notch']" />
+        </transition>
       </button>
     </form>
     <ul id="repo-list">
@@ -103,19 +105,6 @@ form {
       /* &[disabled] { */
       cursor: not-allowed;
       opacity: 0.6;
-
-      svg {
-        animation: rotation 2s infinite linear;
-
-        @keyframes rotation {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(359deg);
-          }
-        }
-      }
     }
   }
 
@@ -126,6 +115,19 @@ form {
     font-size: 16px;
 
     border: 1px solid #eee;
+  }
+}
+
+.rotation-enter-active {
+  animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
   }
 }
 
