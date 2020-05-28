@@ -1,10 +1,5 @@
 # real-world-vue
 
-## Add a repository
-```
-To add a project type his owner and name: "repoOwner/repoName"
-```
-
 ## Project setup
 ```
 yarn install
